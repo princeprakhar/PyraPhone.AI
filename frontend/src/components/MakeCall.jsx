@@ -22,8 +22,8 @@ const MakeCall = () => {
     }
 
     try {
-      // const backendUrl = "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call"
-      const backendUrl = "https://2280-103-199-205-140.ngrok-free.app/api/initiate-call"
+      const backendUrl = "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call"
+      // const backendUrl = "https://2280-103-199-205-140.ngrok-free.app/api/initiate-call"
       // Send request to backend
       const response = await axios.post(backendUrl, {
         to_number: phoneNumber,

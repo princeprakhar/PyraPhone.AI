@@ -39,10 +39,10 @@ function CallStatusDashboard() {
 
   const handleMakeCall = async () => {
     try {
-      // const backendUrl =
-      //   "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call";
       const backendUrl =
-        "https://2280-103-199-205-140.ngrok-free.app/api/initiate-call";
+        "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call";
+      // const backendUrl =
+      //   "https://2280-103-199-205-140.ngrok-free.app/api/initiate-call";
       if (!phoneNumber || !email || !context) {
         navigate("/sender/initiate-call/");
         throw "Fill all fields";
@@ -78,7 +78,8 @@ function CallStatusDashboard() {
       setTranscriptArray([]);
 
       ws = new WebSocket(
-        "wss://2280-103-199-205-140.ngrok-free.app/ws/notifications"
+        "wss://callai-backend-243277014955.us-central1.run.app/ws/notifications"
+        // "wss://2280-103-199-205-140.ngrok-free.app/ws/notifications"
       );
 
       ws.onopen = () => {
