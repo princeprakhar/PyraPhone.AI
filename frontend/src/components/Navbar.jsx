@@ -9,7 +9,7 @@ function Navbar() {
   const navigate = useNavigate();
 
   const navToCallForm = () => {
-    navigate("/initiate-call");
+    navigate("/sender");
   };
 
   const navToFAQ = () => {

@@ -6,7 +6,7 @@ function Hero() {
   const nav = useNavigate("/");
 
   const navToMakeCall = ()=>{
-    nav("/initiate-call")
+    nav("/sender/initiate-call")
   }
 
 

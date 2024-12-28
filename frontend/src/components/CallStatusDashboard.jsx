@@ -21,7 +21,7 @@ function CallStatusDashboard() {
   };
 
   const [isSatisfied, setIsSatisfied] = useState(null);
-  const [objective, setObjective] = useState(callStatus.objective || "");
+  const [context, setContext] = useState(callStatus.context || "");
   const [phoneNumber] = useState(callStatus.to_number || "");
   const [email] = useState(callStatus.email || "");
   const [transcriptArray, setTranscriptArray] = useState([]);
@@ -39,11 +39,11 @@ function CallStatusDashboard() {
 
   const handleMakeCall = async () => {
     try {
-      const backendUrl =
-      "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call";
       // const backendUrl =
-      //   "https://dc6b-103-199-205-140.ngrok-free.app/api/initiate-call";
-      if (!phoneNumber || !email || !objective) {
+      //   "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call";
+      const backendUrl =
+        "https://2280-103-199-205-140.ngrok-free.app/api/initiate-call";
+      if (!phoneNumber || !email || !context) {
         navigate("/sender/initiate-call/");
         throw "Fill all fields";
       }
@@ -51,18 +51,17 @@ function CallStatusDashboard() {
       const response = await axios.post(backendUrl, {
         to_number: phoneNumber,
         email,
-        objective,
+        context,
       });
-      navigate("/initiate-call/call-status", {
+      navigate("/sender/initiate-call/call-status", {
         state: {
           ssid: response.data.call_sid,
           isInitiated: true,
           to_number: phoneNumber,
           email,
-          objective,
+          context,
         },
       });
-
     } catch (error) {
       console.error(
         "Failed to initiate the call. Error:",
@@ -77,50 +76,51 @@ function CallStatusDashboard() {
     if (callStatus.isInitiated) {
       setShowTranscript(true);
       setTranscriptArray([]);
+
       ws = new WebSocket(
-        "wss://callai-backend-243277014955.us-central1.run.app/ws/notifications"
+        "wss://2280-103-199-205-140.ngrok-free.app/ws/notifications"
       );
-      // ws = new WebSocket(
-      //   "wss://dc6b-103-199-205-140.ngrok-free.app/ws/notifications"
-      // );
+
       ws.onopen = () => {
         console.log("WebSocket connected.");
-        ws.send(
-          JSON.stringify({ event: "start", transcription_id: "YOUR_ID" })
-        );
+        ws.send(JSON.stringify({ event: "start", call_sid: callStatus.ssid }));
       };
 
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
-
         if (data.event === "call_ended") {
           const emailStatus = data.email_send;
-          console.log(data)
-          if (emailStatus){
-              toast({
-                title: "Call Ended",
-                description: `Transcript has been sent to ${email}`,
-                duration: 20000,
-                className: "bg-white text-black font-semibold",
-              });
-          } 
-          else{
+          console.log(data);
+          if (emailStatus) {
+            toast({
+              title: "Call Ended",
+              description: `Transcript has been sent to ${email}`,
+              duration: 20000,
+              className: "bg-white text-black font-semibold",
+            });
+          } else {
             toast({
               title: "Call Ended",
               description: `Failed to Send Transcript to ${email}`,
               duration: 20000,
               className: "bg-white text-red font-semibold",
             });
-          }   
-          if (ws) ws.close();
+          }
+          if (ws) {
+            ws.close();
+            callStatus.isInitiated = false;
+          }
         }
 
         if (data.event === "call_in_process") {
           const timestamp = new Date().toLocaleTimeString();
-          setTranscriptArray((prev) => [
-            ...prev,
-            `[${timestamp}] ${data.transcription}`,
-          ]);
+          console.log(data);
+          if (data.transcription !== null) {
+            setTranscriptArray((prev) => [
+              ...prev,
+              `[${timestamp}] ${data.transcription.transcript}`,
+            ]);
+          }
         }
       };
 
@@ -132,12 +132,22 @@ function CallStatusDashboard() {
         console.error("WebSocket Error:", error);
       };
     }
-  }, [callStatus.isInitiated, callStatus.ssid,callStatus.email,toast]);
+  }, [callStatus.isInitiated, callStatus.ssid, callStatus.email, toast]);
 
   // Function to display either ongoing transcript or final transcript
   const getDisplayTranscript = () => {
     if (transcriptArray.length > 0) {
-      return transcriptArray.map((transcript) => `${transcript}\n`).join("");
+      return transcriptArray.map((transcript, index) => (
+        <motion.div
+          key={index}
+          className="p-3 mb-3 rounded-md bg-gray-800 text-slate-200"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {transcript}
+        </motion.div>
+      ));
     }
     return "Waiting for conversation to begin...";
   };
@@ -202,14 +212,12 @@ function CallStatusDashboard() {
           <div className="space-y-4">
             {showTranscript && (
               <motion.div
-                className="p-3 rounded-md bg-gray-900 text-slate-200 ring-1 max-h-96 overflow-y-auto"
+                className="rounded-md bg-gray-900 text-slate-200 ring-1 max-h-96 overflow-y-auto p-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <pre className="whitespace-pre-wrap">
-                  {getDisplayTranscript()}
-                </pre>
+                {getDisplayTranscript()}
               </motion.div>
             )}
           </div>
@@ -271,8 +279,8 @@ function CallStatusDashboard() {
               <textarea
                 className="w-full p-2 border rounded-lg mb-4 text-black"
                 placeholder="Enter updated objective (optional)..."
-                value={objective}
-                onChange={(e) => setObjective(e.target.value)}
+                value={context}
+                onChange={(e) => setContext(e.target.value)}
               />
               <button
                 className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 mr-4"

@@ -17,7 +17,7 @@ function ServiceOption() {
   };
 
   const navToCallForm = () => {
-    navigate("/initiate-call");
+    navigate("/sender");
   };
 
   return (
@@ -33,27 +33,30 @@ function ServiceOption() {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="flex flex-col w-full lg:w-2/3  text-white border rounded-lg shadow-md ring-1 p-6"
+          className="flex flex-col w-full lg:w-2/3 h-96 text-white border rounded-lg shadow-md ring-1 p-6"
         >
           {/* Business Name */}
           <h1 className="text-4xl md:text-6xl font-bold text-white">Call-AI</h1>
 
           {/* Header with Typewriter Effect */}
-          <h2 className="mt-4 text-lg flex flex-row md:text-2xl font-semibold text-gray-200">
-            Stop wasting time with{" "}
-            <span className="text-purple-500">
-              
-              <Typewriter
-                options={{
-                  strings: options,
-                  autoStart: true,
-                  loop: true,
-                  delay: 50,
-                  deleteSpeed: 30,
-                }}
-              />
+          <h2 className="text-xl md:text-3xl flex mt-4 flex-wrap font-semibold whitespace-nowrap">
+            <span className="text-gray-200">Stop wasting time with&nbsp; </span>
+            <span className=" inline-block min-w-auto ">
+              <span className="text-purple-500">
+                <Typewriter
+                  options={{
+                    strings: options,
+                    autoStart: true,
+                    loop: true,
+                    delay: 50,
+                    deleteSpeed: 50,
+                    cursor: "_",
+                    pauseFor: 1500,
+                  }}
+                />
+              </span>
             </span>
-            , Delegate to AI.
+            <span className="text-gray-200">, Delegate to AI.</span>
           </h2>
 
           {/* Buttons */}
@@ -75,7 +78,7 @@ function ServiceOption() {
             <motion.button
               whileHover={{
                 scale: 1.1,
-                backgroundColor: "#410a4a",
+                backgroundColor: "#410a4b",
                 color: "#fff",
                 boxShadow: "0 8px 15px rgba(0, 0, 0, 0.3)",
               }}
@@ -104,14 +107,14 @@ function ServiceOption() {
               </motion.div>
             ))}
           </div>*/}
-        </motion.div> 
+        </motion.div>
 
         {/* Video Section */}
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5, duration: 1 }}
-          className="w-full lg:w-1/3 bg-transparent text-white shadow-4xl rounded-lg overflow-hidden hidden lg:block"
+          className="w-full lg:w-1/3 bg-transparent  h-96 text-white shadow-4xl rounded-lg overflow-hidden hidden lg:block"
         >
           <video
             src="animation.mp4"
