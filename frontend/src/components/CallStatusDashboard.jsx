@@ -119,7 +119,7 @@ function CallStatusDashboard() {
           if (data.transcription !== null) {
             setTranscriptArray((prev) => [
               ...prev,
-              `[${timestamp}] ${data.transcription.transcript}`,
+              `[${timestamp}] ${data.transcription}`,
             ]);
           }
         }
