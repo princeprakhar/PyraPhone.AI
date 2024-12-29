@@ -26,6 +26,7 @@ function CallStatusDashboard() {
       console.log("---- in the end call -----");
       console.log(callStatus.ssid);
       const backendUrl =
+        // "https://d9be-103-69-25-33.ngrok-free.app/api/end-call";
         "https://callai-backend-243277014955.us-central1.run.app/api/end-call";
       const response = await axios.post(backendUrl, {
         call_sid: callStatus.ssid,
@@ -59,6 +60,7 @@ function CallStatusDashboard() {
       }
 
       const response = await axios.post(
+        // "https://d9be-103-69-25-33.ngrok-free.app/api/initiate-call",
         "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call",
         {
           to_number: callStatus.to_number,
@@ -99,7 +101,7 @@ function CallStatusDashboard() {
 
       
       ws = new WebSocket(
-        // "wss://2a07-103-69-25-33.ngrok-free.app/ws/notifications"
+        // "wss://d9be-103-69-25-33.ngrok-free.app/ws/notifications"
         "wss://callai-backend-243277014955.us-central1.run.app/ws/notifications"
       );
       console.log("################## Connecting WebSocket... ##########");
@@ -123,6 +125,7 @@ function CallStatusDashboard() {
 
         else if (data.event === "call_ended") {
           const emailStatus = data.email_send;
+          setIsCallEnded(true);
           toast({
             title: "Call Ended",
             description: emailStatus
