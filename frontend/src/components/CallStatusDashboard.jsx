@@ -204,7 +204,7 @@ function CallStatusDashboard() {
                 <strong>Phone Number:</strong> {callStatus.to_number || "N/A"}
               </p>
               <p className="mt-2 text-gray-400">
-                <strong>Email:</strong> {callStatus.email || "N/A"}
+                <strong>Name or Organization name:</strong> {callStatus.email || "N/A"}
               </p>
             </div>
           ) : (
