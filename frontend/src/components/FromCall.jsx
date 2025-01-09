@@ -15,9 +15,11 @@ const FromCall = () =>{
 
   // Function to make the call
   const handleMakeCall = async () => {
+
     setCallerNumber("");
     setName("");
     setName("");
+
     navigate("/sender/initiate-call");
   }
 
@@ -52,7 +54,7 @@ const FromCall = () =>{
           id="email"
           value={email}
           onChange={handleInputChange(setEmail)}
-          placeholder="Enter the email"
+          placeholder="Your email"
           className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
@@ -67,7 +69,7 @@ const FromCall = () =>{
           id="Name"
           value={name}
           onChange={handleInputChange(setName)}
-          placeholder="type the name ..."
+          placeholder="Your name"
           className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
@@ -76,19 +78,10 @@ const FromCall = () =>{
 
       {/* Make Call Button */}
       <Button onClick={handleMakeCall} className="w-full bg-purple-500 hover:bg-purple-600 text-white">
-        Next...
+        Next
       </Button>
 
-      {/* Response Message */}
-      {/* {responseMessage && (
-        <p
-          className={`mt-4 text-center font-medium ${
-            responseMessage.includes("Failed") ? "text-red-500" : "text-green-500"
-          }`}
-        >
-          {responseMessage}
-        </p> */}
-      {/* )} */}
+      
     </div>
     </main>
 
@@ -102,19 +95,3 @@ const FromCall = () =>{
 
 
 export default FromCall;
-
-
-
-
-
-
-
-
-
-// const backendUrl =
-//         
-
-
-// ws = new WebSocket(
-//   "wss://callai-backend-243277014955.us-central1.run.app/ws/notifications"
-// );

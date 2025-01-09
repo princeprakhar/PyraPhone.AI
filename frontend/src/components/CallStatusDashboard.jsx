@@ -4,6 +4,31 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
+
+const HeaderMessage = () => {
+  return (
+    <div>
+      <motion.div
+        className="bg-transparent mt-10 p-6 rounded-lg shadow-md border hover:shadow-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 , duration: 0.5 }}
+      >
+        <motion.h3
+          className="mt-2 text-gray-500 text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <span className="font-bold text-lg ">💡Note: </span>Feel free to close this browser. A summary of the call will be sent to you over email.
+        </motion.h3>
+      </motion.div>
+    </div>
+  );
+};
+
+
 
 function CallStatusDashboard() {
   const location = useLocation();
@@ -12,9 +37,10 @@ function CallStatusDashboard() {
 
   const { state } = location || {};
   const [callStatus, setCallStatus] = useState(state);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isSatisfied, setIsSatisfied] = useState(null);
-  const [context, setContext] = useState(callStatus.context || "");
+  const [objective, setObjective] = useState(callStatus.objective || "");
   const [transcriptArray, setTranscriptArray] = useState([]);
   const [showTranscript, setShowTranscript] = useState(false);
   const [isCallEnded, setIsCallEnded] = useState(false);
@@ -23,10 +49,10 @@ function CallStatusDashboard() {
 
   const handleEndCall = async () => {
     try {
-      console.log("---- in the end call -----");
+      console.log("---- In the end call -----");
       console.log(callStatus.ssid);
       const backendUrl =
-        // "https://d9be-103-69-25-33.ngrok-free.app/api/end-call";
+        // "https://7895-103-69-25-33.ngrok-free.app/api/end-call";
         "https://callai-backend-243277014955.us-central1.run.app/api/end-call";
       const response = await axios.post(backendUrl, {
         call_sid: callStatus.ssid,
@@ -53,19 +79,28 @@ function CallStatusDashboard() {
   };
 
   const handleMakeCall = async () => {
+    setIsLoading(true);
     try {
-      if (!callStatus.to_number || !callStatus.email || !context) {
-        navigate("/sender/initiate-call/");
+      if (!callStatus.to_number || !callStatus.email || !objective || !callStatus.context) {
+        toast({
+          "title":"Error",
+          "description": `missing value ${callStatus.to_number} ${callStatus.email} ${objective} ${callStatus.context}`,
+          duration: 5000,
+            className: "bg-white text-red-500 font-semibold",
+
+        })
+        navigate("/sender/");
         return;
       }
 
       const response = await axios.post(
-        // "https://d9be-103-69-25-33.ngrok-free.app/api/initiate-call",
+        // "https://7895-103-69-25-33.ngrok-free.app/api/initiate-call",
         "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call",
         {
           to_number: callStatus.to_number,
           email: callStatus.email,
-          context,
+          objective: objective,
+          context: callStatus.context
         }
       );
       setCallStatus({
@@ -73,7 +108,8 @@ function CallStatusDashboard() {
         isInitiated: true,
         to_number: callStatus.to_number,
         email: callStatus.email,
-        context: context,
+        objective: objective,
+        context: callStatus.context
       });
 
       setIsCallEnded(false);
@@ -82,6 +118,7 @@ function CallStatusDashboard() {
       setIsSatisfied(null);
     } catch (error) {
       console.error(
+
         "Failed to initiate call:",
         error.response?.data?.detail || error.message
       );
@@ -101,7 +138,7 @@ function CallStatusDashboard() {
 
       
       ws = new WebSocket(
-        // "wss://d9be-103-69-25-33.ngrok-free.app/ws/notifications"
+        // "wss://7895-103-69-25-33.ngrok-free.app/ws/notifications"
         "wss://callai-backend-243277014955.us-central1.run.app/ws/notifications"
       );
       console.log("################## Connecting WebSocket... ##########");
@@ -129,12 +166,12 @@ function CallStatusDashboard() {
           toast({
             title: "Call Ended",
             description: emailStatus
-              ? `Transcript has been sent to ${callStatus.email}`
+              ? `Call AI just helped you save ${data.call_duration} min! A copy of the transcript and audio recording has been sent to  ${callStatus.email}`
               : `Failed to send transcript to ${callStatus.email}`,
             duration: 20000,
             className: emailStatus
               ? "bg-white text-black font-semibold"
-              : "bg-white text-red font-semibold",
+              : "bg-white text-red-500 font-semibold",
           });
           console.log("Call ended, closing WebSocket.");
           ws.close();
@@ -184,6 +221,7 @@ function CallStatusDashboard() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
+      <HeaderMessage/>
       <div className="flex flex-col mt-10 lg:flex-row justify-between items-start lg:space-x-8 space-y-8 lg:space-y-0">
         <motion.div
           className="w-full lg:w-1/2 bg-black ring-1 border rounded-lg shadow-lg p-6"
@@ -209,7 +247,7 @@ function CallStatusDashboard() {
             </div>
           ) : (
             <div className="text-lg text-red-500 font-semibold">
-              ⏳ Call Not Initiated... Please Wait.
+               Call terminated.
             </div>
           )}
         </motion.div>
@@ -282,14 +320,21 @@ function CallStatusDashboard() {
               <textarea
                 className="w-full p-2 border rounded-lg mb-4 text-black"
                 placeholder="Enter updated objective (optional)..."
-                value={context}
-                onChange={(e) => setContext(e.target.value)}
+                value={objective}
+                onChange={(e) => setObjective(e.target.value)}
               />
               <button
                 className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 mr-4"
                 onClick={handleMakeCall}
               >
-                Update Objective & Recall
+                {isLoading ? (
+            <div className="flex items-center justify-center">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Initiating recall...
+            </div>
+          ) : (
+            "Update Objective and Recall!"
+          )}
               </button>
             </div>
           ) : null}

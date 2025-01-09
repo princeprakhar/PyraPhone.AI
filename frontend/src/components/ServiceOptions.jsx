@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 function ServiceOption() {
   const options = [
-    " insurance",
-    " appointment scheduling",
-    " reservations",
-    " mundane calls",
+    "insurance",
+    "appointment scheduling",
+    "reservations",
+    "mundane calls",
+    "customer care",
   ];
 
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ function ServiceOption() {
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1, ease: "easeInOut" }}
-      className="container mx-auto p-4"
+      className="container mx-auto md:mt-20"
     >
       <div className="flex flex-col lg:flex-row bg-transparent text-white justify-between items-center lg:items-start space-y-8 lg:space-y-0">
         {/* Left Section */}
@@ -50,14 +51,17 @@ function ServiceOption() {
                     loop: true,
                     delay: 50,
                     deleteSpeed: 50,
-                    cursor: "_",
+                    cursor: "|",
                     pauseFor: 1500,
                   }}
                 />
               </span>
             </span>
-            <span className="text-gray-200">, Delegate to AI.</span>
+            <div className="text-gray-200">.</div>
           </h2>
+          <div className="text-xl md:text-3xl flex mt-4 flex-wrap font-semibold whitespace-nowrap">
+            Delegate to AI.
+          </div>
 
           {/* Buttons */}
           <div className="flex flex-wrap justify-start space-x-3 mt-6">
@@ -91,22 +95,28 @@ function ServiceOption() {
             </motion.button>
           </div>
 
-          {/* Service Options
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-            {options.map((option, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 * index, duration: 0.5 }}
-                className="flex items-center p-4 bg-gray-50 opacity-80 rounded-lg border shadow-sm hover:bg-blue-50 transition-transform transform hover:scale-105"
-              >
-                <div className="text-purple-700 font-semibold text-lg capitalize">
-                  {option}
-                </div>
-              </motion.div>
-            ))}
-          </div>*/}
+          <motion.div
+            className="flex flex-col  m-1"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2 }}
+          >
+            <motion.p
+              className="mt-4 text-md text-gray-700 "
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2 }}
+            >
+              100% secure and private
+              <motion.span>
+                <motion.img
+                  src="/padlock.png"
+                  alt="Padlock"
+                  className="inline-block w-6 h-5 ml-2 bg-transparent"
+                />
+              </motion.span>
+            </motion.p>
+          </motion.div>
         </motion.div>
 
         {/* Video Section */}
@@ -116,13 +126,11 @@ function ServiceOption() {
           transition={{ delay: 0.5, duration: 1 }}
           className="w-full lg:w-1/3 bg-transparent  h-96 text-white shadow-4xl rounded-lg overflow-hidden hidden lg:block"
         >
-          <video
-            src="animation.mp4"
-            autoPlay
-            loop
-            muted
-            className="w-full h-full object-cover"
-          ></video>
+          <img
+            src="bg.png"
+            alt="Hero-Section Image"
+            className="w-full h-full ml-2 ring-1"
+          ></img>
         </motion.div>
       </div>
     </motion.div>

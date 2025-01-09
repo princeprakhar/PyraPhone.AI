@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 const MakeCall = () => {
-  const [phoneNumber, setPhoneNumber] = useState(""); // State for phone number input
-  const [email, setEmail] = useState(""); // State for email input
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState(""); 
   const [responseMessage, setResponseMessage] = useState(""); 
   const navigate = useNavigate("");
   const [context,setContext] = useState("");
@@ -74,7 +74,22 @@ const MakeCall = () => {
           id="email"
           value={email}
           onChange={handleInputChange(setEmail)}
-          placeholder="xyz@example.com"
+          placeholder="xFinity or Happy Teeth Dental Clinic"
+          className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        />
+      </div>
+
+
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="context" className="text-sm font-medium text-white">
+          Objective:
+        </label>
+        <input
+          type="text"
+          id="outcome"
+          value={outcome}
+          onChange={handleInputChange(setOutcome)}
+          placeholder="Get me an appointment as soon as possible OR Ask for a refund"
           className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
@@ -82,31 +97,18 @@ const MakeCall = () => {
       {/* Objective Input */}
       <div className="flex flex-col space-y-2">
         <label htmlFor="objective" className="text-sm font-medium text-white">
-        Context For the Call:
+        Additional details:
         </label>
         <textarea
           id="context"
           value={context}
           onChange={handleInputChange(setContext)}
-          placeholder="State the purpose of the call"
+          placeholder="Please provide all necessary information to facilitate the call. This could include you account ID, insurance details."
           className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
-      {/* context Input */}
-      <div className="flex flex-col space-y-2">
-        <label htmlFor="context" className="text-sm font-medium text-white">
-          Desired Outcome:
-        </label>
-        <input
-          type="text"
-          id="outcome"
-          value={outcome}
-          onChange={handleInputChange(setOutcome)}
-          placeholder="type the outcome ..."
-          className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-        />
-      </div>
+      
 
       {/* Make Call Button */}
       <Button onClick={handleMakeCall} className="w-full bg-purple-500 hover:bg-purple-600 text-white">
