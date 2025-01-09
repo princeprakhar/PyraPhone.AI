@@ -330,7 +330,7 @@ function CallStatusDashboard() {
                 {isLoading ? (
             <div className="flex items-center justify-center">
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Initiating recall...
+              AI is firing up. Hold steady!
             </div>
           ) : (
             "Update Objective and Recall!"

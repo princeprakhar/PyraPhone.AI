@@ -118,7 +118,7 @@ const HowShouldWeContactYou = () => {
           {isLoading ? (
             <div className="flex items-center justify-center">
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Initiating Call...
+              AI is firing up. Hold steady!
             </div>
           ) : (
             "Make Call"
