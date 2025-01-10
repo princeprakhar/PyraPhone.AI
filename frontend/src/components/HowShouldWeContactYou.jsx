@@ -32,7 +32,7 @@ const HowShouldWeContactYou = () => {
 
     setIsLoading(true);
     try {
-      // const backendUrl = "https://7895-103-69-25-33.ngrok-free.app/api/initiate-call"
+      // const backendUrl = "https://c2ec-103-69-25-33.ngrok-free.app/api/initiate-call"
       const backendUrl = "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call"
       const response = await axios.post(backendUrl, {
         to_number: state.phoneNumber,

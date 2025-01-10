@@ -52,7 +52,7 @@ function CallStatusDashboard() {
       console.log("---- In the end call -----");
       console.log(callStatus.ssid);
       const backendUrl =
-        // "https://7895-103-69-25-33.ngrok-free.app/api/end-call";
+        // "https://c2ec-103-69-25-33.ngrok-free.app/api/end-call";
         "https://callai-backend-243277014955.us-central1.run.app/api/end-call";
       const response = await axios.post(backendUrl, {
         call_sid: callStatus.ssid,
@@ -94,7 +94,7 @@ function CallStatusDashboard() {
       }
 
       const response = await axios.post(
-        // "https://7895-103-69-25-33.ngrok-free.app/api/initiate-call",
+        // "https://c2ec-103-69-25-33.ngrok-free.app/api/initiate-call",
         "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call",
         {
           to_number: callStatus.to_number,
@@ -138,7 +138,7 @@ function CallStatusDashboard() {
 
       
       ws = new WebSocket(
-        // "wss://7895-103-69-25-33.ngrok-free.app/ws/notifications"
+        // "wss://c2ec-103-69-25-33.ngrok-free.app/ws/notifications"
         "wss://callai-backend-243277014955.us-central1.run.app/ws/notifications"
       );
       console.log("################## Connecting WebSocket... ##########");
