@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -20,31 +20,46 @@ const HowShouldWeContactYou = () => {
 
   const handleMakeCall = async () => {
     // Check if all fields are filled
-    if (!callerNumber || !email || !name) {
+    if (!callerNumber || !email || !name || !state.nameOrOrganization) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all fields before proceeding.",
+        description: `Please fill in all fields before proceeding. `,
         duration: 5000,
-        className: "bg-white text-red font-semibold",
+        className: "bg-white text-red-400 font-semibold",
       });
       return;
     }
 
     setIsLoading(true);
     try {
-      // const backendUrl = "https://c2ec-103-69-25-33.ngrok-free.app/api/initiate-call"
-      const backendUrl = "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call"
+      
+      console.log(`Phone Number: ${state.phoneNumber} \n ${email} ${state.objective} ${state.additionalInfo} ${callerNumber} ${state.nameOrOrganization}`)
+
+      const backendUrl =
+        // "https://bb81-103-69-25-33.ngrok-free.app/api/initiate-call";
+      "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call"
       const response = await axios.post(backendUrl, {
         to_number: state.phoneNumber,
         email: email,
         objective: state.objective,
         context: state.additionalInfo,
+        caller_number: callerNumber,
+        name_of_org: state.nameOrOrganization,
       });
+      console.log(`${state.phoneNumber} ${email} ${state.objective} ${state.additionalInfo} ${callerNumber} ${state.nameOrOrganization}`)
 
       navigate("/sender/initiate-call/call-status", {
-        state: { ssid: response.data.call_sid, isInitiated: true, to_number: state.phoneNumber, email: email, objective: state.objective, context:state.additionalInfo },
+        state: {
+          ssid: response.data.call_sid,
+          isInitiated: true,
+          to_number: state.phoneNumber,
+          email: email,
+          objective: state.objective,
+          context: state.additionalInfo,
+          caller_number: callerNumber,
+          name_of_org: state.nameOfOrganization,
+        },
       });
-
     } catch (error) {
       setIsLoading(false);
       toast({
@@ -59,15 +74,20 @@ const HowShouldWeContactYou = () => {
         }`
       );
     }
-  }
+  };
 
   return (
     <main className="bg-black bg-opacity-90 text-gray-800 rounded-lg shadow-lg p-6 w-full max-w-xl space-y-6 transition-transform transform hover:scale-105 duration-300 ease-in-out">
       <div className="p-6 max-w-md mx-auto bg-black ring-2 rounded-lg shadow-md space-y-4">
-        <h2 className="text-2xl font-semibold text-white">How should we contact you?</h2>
+        <h2 className="text-2xl font-semibold text-white">
+          How should we contact you?
+        </h2>
 
         <div className="flex flex-col space-y-2">
-          <label htmlFor="caller-number" className="text-sm font-medium text-white">
+          <label
+            htmlFor="caller-number"
+            className="text-sm font-medium text-white"
+          >
             Phone Number:
           </label>
           <input
@@ -128,6 +148,6 @@ const HowShouldWeContactYou = () => {
       <Toaster />
     </main>
   );
-}
+};
 
 export default HowShouldWeContactYou;

@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const WhoDoYouWantToCall = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [nameOrOrganization, setNameOrOrganization] = useState("");
+  const [nameOrOrganization, setNameOfOrganization] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate("");
   const [additionalInfo, setAdditionalInfo] = useState("");
@@ -17,10 +17,10 @@ const WhoDoYouWantToCall = () => {
 
   // Function to make the call
   const handleMakeCall = async () => {
-    if (!phoneNumber || !nameOrOrganization || !objective ) {
+    if (!phoneNumber || !nameOrOrganization || !objective || !additionalInfo ) {
       toast({
         title: "Fill all the Field",
-        description: "Filling Required field are compulsory to continue.",
+        description: `Filling Required field are compulsory to continue. `,
         duration: 5000,
         className: "bg-white text-red-700 font-semibold",
       });
@@ -84,7 +84,7 @@ const WhoDoYouWantToCall = () => {
             type="nameOrOrganization"
             id="nameOrOrganization"
             value={nameOrOrganization}
-            onChange={handleInputChange(setNameOrOrganization)}
+            onChange={handleInputChange(setNameOfOrganization)}
             placeholder="xFinity or Happy Teeth Dental Clinic"
             className="p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
           />

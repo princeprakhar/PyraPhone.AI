@@ -13,7 +13,7 @@ const HeaderMessage = () => {
         className="bg-transparent mt-10 p-6 rounded-lg shadow-md border hover:shadow-md"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 , duration: 0.5 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
       >
         <motion.h3
           className="mt-2 text-gray-500 text-lg"
@@ -21,14 +21,13 @@ const HeaderMessage = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <span className="font-bold text-lg ">💡Note: </span>Feel free to close this browser. A summary of the call will be sent to you over email.
+          <span className="font-bold text-lg ">💡Note: </span>Feel free to close
+          this browser. A summary of the call will be sent to you over email.
         </motion.h3>
       </motion.div>
     </div>
   );
 };
-
-
 
 function CallStatusDashboard() {
   const location = useLocation();
@@ -52,8 +51,8 @@ function CallStatusDashboard() {
       console.log("---- In the end call -----");
       console.log(callStatus.ssid);
       const backendUrl =
-        // "https://c2ec-103-69-25-33.ngrok-free.app/api/end-call";
-        "https://callai-backend-243277014955.us-central1.run.app/api/end-call";
+        // "https://bb81-103-69-25-33.ngrok-free.app/api/end-call";
+      "https://callai-backend-243277014955.us-central1.run.app/api/end-call";
       const response = await axios.post(backendUrl, {
         call_sid: callStatus.ssid,
       });
@@ -81,26 +80,32 @@ function CallStatusDashboard() {
   const handleMakeCall = async () => {
     setIsLoading(true);
     try {
-      if (!callStatus.to_number || !callStatus.email || !objective || !callStatus.context) {
+      if (
+        !callStatus.to_number ||
+        !callStatus.email ||
+        !objective ||
+        !callStatus.context
+      ) {
         toast({
-          "title":"Error",
-          "description": `missing value ${callStatus.to_number} ${callStatus.email} ${objective} ${callStatus.context}`,
+          title: "Error",
+          description: `missing value ${callStatus.to_number} ${callStatus.email} ${objective} ${callStatus.context}`,
           duration: 5000,
-            className: "bg-white text-red-500 font-semibold",
-
-        })
+          className: "bg-white text-red-500 font-semibold",
+        });
         navigate("/sender/");
         return;
       }
 
       const response = await axios.post(
-        // "https://c2ec-103-69-25-33.ngrok-free.app/api/initiate-call",
+        // "https://bb81-103-69-25-33.ngrok-free.app/api/initiate-call",
         "https://callai-backend-243277014955.us-central1.run.app/api/initiate-call",
         {
           to_number: callStatus.to_number,
           email: callStatus.email,
           objective: objective,
-          context: callStatus.context
+          context: callStatus.context,
+          caller_number: state.callerNumber,
+          name_of_org: state.nameOfOrganization,
         }
       );
       setCallStatus({
@@ -109,7 +114,9 @@ function CallStatusDashboard() {
         to_number: callStatus.to_number,
         email: callStatus.email,
         objective: objective,
-        context: callStatus.context
+        context: callStatus.context,
+        caller_number: state.callerNumber,
+        name_of_org: state.nameOfOrganization,
       });
 
       setIsCallEnded(false);
@@ -118,7 +125,6 @@ function CallStatusDashboard() {
       setIsSatisfied(null);
     } catch (error) {
       console.error(
-
         "Failed to initiate call:",
         error.response?.data?.detail || error.message
       );
@@ -136,9 +142,8 @@ function CallStatusDashboard() {
       setShowTranscript(true);
       setTranscriptArray([]);
 
-      
       ws = new WebSocket(
-        // "wss://c2ec-103-69-25-33.ngrok-free.app/ws/notifications"
+        // "wss://bb81-103-69-25-33.ngrok-free.app/ws/notifications"
         "wss://callai-backend-243277014955.us-central1.run.app/ws/notifications"
       );
       console.log("################## Connecting WebSocket... ##########");
@@ -153,14 +158,13 @@ function CallStatusDashboard() {
 
         if (data.event === "ping") {
           console.log("websocket is alive");
-        }
-
-        else if (data.event === "call_status" && data.status !== "completed") {
+        } else if (
+          data.event === "call_status" &&
+          data.status !== "completed"
+        ) {
           console.log("Call status incomplete, closing WebSocket.");
           ws.close();
-        }
-
-        else if (data.event === "call_ended") {
+        } else if (data.event === "call_ended") {
           const emailStatus = data.email_send;
           setIsCallEnded(true);
           toast({
@@ -176,9 +180,10 @@ function CallStatusDashboard() {
           console.log("Call ended, closing WebSocket.");
           ws.close();
           callStatus.isInitiated = false; // Caution: avoid directly mutating state
-        }
-
-        else if (data.event === "call_in_process" && data.transcription !== null) {
+        } else if (
+          data.event === "call_in_process" &&
+          data.transcription !== null
+        ) {
           const timestamp = new Date().toLocaleTimeString();
           setTranscriptArray((prev) => [
             ...prev,
@@ -221,7 +226,7 @@ function CallStatusDashboard() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <HeaderMessage/>
+      <HeaderMessage />
       <div className="flex flex-col mt-10 lg:flex-row justify-between items-start lg:space-x-8 space-y-8 lg:space-y-0">
         <motion.div
           className="w-full lg:w-1/2 bg-black ring-1 border rounded-lg shadow-lg p-6"
@@ -242,12 +247,13 @@ function CallStatusDashboard() {
                 <strong>Phone Number:</strong> {callStatus.to_number || "N/A"}
               </p>
               <p className="mt-2 text-gray-400">
-                <strong>Name or Organization name:</strong> {callStatus.email || "N/A"}
+                <strong>Name or Organization name:</strong>{" "}
+                {callStatus.email || "N/A"}
               </p>
             </div>
           ) : (
             <div className="text-lg text-red-500 font-semibold">
-               Call terminated.
+              Call terminated.
             </div>
           )}
         </motion.div>
@@ -328,13 +334,13 @@ function CallStatusDashboard() {
                 onClick={handleMakeCall}
               >
                 {isLoading ? (
-            <div className="flex items-center justify-center">
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              AI is firing up. Hold steady!
-            </div>
-          ) : (
-            "Update Objective and Recall!"
-          )}
+                  <div className="flex items-center justify-center">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    AI is firing up. Hold steady!
+                  </div>
+                ) : (
+                  "Update Objective and Recall!"
+                )}
               </button>
             </div>
           ) : null}
