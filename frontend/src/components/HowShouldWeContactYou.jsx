@@ -20,7 +20,7 @@ const HowShouldWeContactYou = () => {
 
   const handleMakeCall = async () => {
     // Check if all fields are filled
-    if (!callerNumber || !email || !name || !state.nameOrOrganization) {
+    if ( !email ) {
       toast({
         title: "Missing Information",
         description: `Please fill in all fields before proceeding. `,
@@ -88,7 +88,7 @@ const HowShouldWeContactYou = () => {
             htmlFor="caller-number"
             className="text-sm font-medium text-white"
           >
-            Phone Number:
+            Phone Number: 
           </label>
           <input
             type="tel"
@@ -103,7 +103,7 @@ const HowShouldWeContactYou = () => {
 
         <div className="flex flex-col space-y-2">
           <label htmlFor="name" className="text-sm font-medium text-white">
-            Email:
+            Email: <span className="text-gray-400">*</span>
           </label>
           <textarea
             id="email"

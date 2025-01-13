@@ -26,7 +26,7 @@ function ServiceOption() {
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1, ease: "easeInOut" }}
-      className="container mx-auto md:mt-20"
+      className="container mx-auto mt-20"
     >
       <div className="flex flex-col lg:flex-row bg-transparent text-white justify-between items-center lg:items-start space-y-8 lg:space-y-0">
         {/* Left Section */}
@@ -73,7 +73,7 @@ function ServiceOption() {
                 boxShadow: "0 8px 15px rgba(0, 0, 0, 0.3)",
               }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 py-3 bg-slate-400 text-white rounded-lg shadow-lg"
+              className="px-6 py-3 text-white bg-slate-600 rounded-lg "
               transition={{ type: "spring", stiffness: 300 }}
               onClick={navToFAQ}
             >
@@ -119,7 +119,7 @@ function ServiceOption() {
           </motion.div>
         </motion.div>
 
-        {/* Video Section */}
+        {/* Video Section
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
@@ -131,7 +131,7 @@ function ServiceOption() {
             alt="Hero-Section Image"
             className="w-full h-full ml-2 ring-1"
           ></img>
-        </motion.div>
+        </motion.div> */}
       </div>
     </motion.div>
   );

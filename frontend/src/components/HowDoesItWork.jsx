@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
 const Step = ({ stepNumber, description }) => (
@@ -30,6 +31,7 @@ const Step = ({ stepNumber, description }) => (
 );
 
 const HowDoesItWork = () => {
+  const navigate = useNavigate();
   const containerVariants = {
     
         hidden: { opacity: 0 },
@@ -39,6 +41,9 @@ const HowDoesItWork = () => {
             staggerChildren: 0.3
           }
         }
+      };
+      const navToCallForm = () => {
+        navigate("/sender");
       };
     
   return (
@@ -75,10 +80,24 @@ const HowDoesItWork = () => {
             stepNumber="4"
             description="After the call, we will report back to you over email and work with you to figure out consequent actions."
           />
-          <Step
+          {/* <Step
             stepNumber="5"
             description="CTA: Continue for free!"
-          />
+          /> */}
+          <motion.button
+              whileHover={{
+                scale: 1.1,
+                backgroundColor: "#410a4b",
+                color: "#fff",
+                boxShadow: "0 8px 15px rgba(0, 0, 0, 0.3)",
+              }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-3 bg-purple-500 text-white rounded-lg shadow-lg"
+              transition={{ type: "spring", stiffness: 300 }}
+              onClick={navToCallForm}
+            >
+              Continue for Free!
+            </motion.button>
         </div>
       </motion.div>
     </div>

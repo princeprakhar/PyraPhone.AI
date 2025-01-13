@@ -16,6 +16,11 @@ function FAQDashboard() {
       answer:
         "There is no specific limit, but charges apply based on the number of calls and the duration of each call beyond the included 60 minutes.",
     },
+    {
+      question: "Is my information confidential?",
+      answer:
+        "Yes. Your information is 100% secure and private. We do not share your information with any third parties.",
+    },
   ];
 
   return (

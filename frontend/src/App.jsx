@@ -4,6 +4,7 @@ import ReceiverForm from "./pages/ReceiverForm";
 import SenderForm from "./pages/SenderForm";
 import FAQ from "@/pages/FAQ"
 import CallStatus from "./pages/CallStatus";
+import ContactPage from "./pages/ContactPage";
 function App() {
   return (
     <div
@@ -19,6 +20,7 @@ function App() {
         <Route path="/sender/initiate-call" element={<ReceiverForm/>} />
         <Route path="/sender/" element={<SenderForm/>}/>
         <Route path="/faq" element={<FAQ/>}/>
+        <Route path="/contact" element={<ContactPage/>}/>
         <Route path= "/sender/initiate-call/call-status" element={<CallStatus/>}/>
         {/* Define route for both "/" and "/home" */}
         <Route path="/" element={<Home />} />

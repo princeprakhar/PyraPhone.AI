@@ -26,13 +26,13 @@ const UseOfIt = () => {
           whileHover={{ scale:1.02, backgroundColor: 'rgba(0, 0, 0, 0.2)' }}
           transition={{ duration: 0.5 }}
         >
-          <motion.div 
-            className="flex items-center justify-center w-8 h-8 bg-purple-600/80 text-white rounded-full text-sm"
+          {/* <motion.div 
+            className="flex items-center justify-center w-8 h-8  text-white rounded-full text-sm"
             whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.3 }}
           >
-            1
-          </motion.div>
+            💡
+          </motion.div> */}
           <p className="text-gray-200 text-base leading-relaxed flex-1 pt-1">
             You can use our service to delegate a wide variety of tasks: customer service, getting refunds, doctor appointments, reservations, or anything else that needs a phone call and can save you time.
           </p>
