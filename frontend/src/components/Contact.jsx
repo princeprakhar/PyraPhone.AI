@@ -41,6 +41,7 @@ const Contact = () => {
           duration: 5000,
           className: "bg-white text-black font-semibold",
         });
+        setIsLoading(false);
       }
     } catch (error) {
       setIsLoading(false);
@@ -62,7 +63,7 @@ const Contact = () => {
     <main className="bg-black bg-opacity-90 text-gray-800 rounded-lg shadow-lg p-6 w-full max-w-xl space-y-6 transition-transform transform hover:scale-105 duration-300 ease-in-out">
       <div className="p-6 max-w bg-black ring-2 test-white mx-auto rounded-lg shadow-md space-y-4">
         <h2 className="text-2xl font-semibold text-white text-center">
-          Contact-Us
+          Contact Us
         </h2>
         {/* name Input */}
         <div className="flex flex-col space-y-2">
