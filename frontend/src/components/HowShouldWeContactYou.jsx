@@ -45,6 +45,7 @@ const HowShouldWeContactYou = () => {
         context: state.additionalInfo,
         caller_number: callerNumber,
         name_of_org: state.nameOrOrganization,
+        name: name
       });
       console.log(`${state.phoneNumber} ${email} ${state.objective} ${state.additionalInfo} ${callerNumber} ${state.nameOrOrganization}`)
 
