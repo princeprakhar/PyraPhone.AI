@@ -34,23 +34,23 @@ function Navbar() {
     <div className="w-full fixed top-4 px-4 z-40 flex justify-between items-center">
       {/* Left Logo */}
       <motion.div
-        className={`rounded-lg p-1 mx-4 sm:hidden md:block ${
-          isScrolled
-            ? "bg-white shadow-lg backdrop-blur-md"
-            : "bg-slate-200 opacity-90"
-        }`}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <a href="/">
+        // className={`rounded-lg p-1 mx-4 sm:hidden md:block ${
+        //   isScrolled
+        //     ? "bg-white shadow-lg backdrop-blur-md"
+        //     : "bg-slate-200 opacity-90"
+        // }`}
+        // initial={{ opacity: 0 }}
+        // animate={{ opacity: 1 }}
+        // transition={{ duration: 0.5 }}
+      > 
+        {/* <a href="/">
         <img 
           src="/Call-AI-logo.png" 
           alt="Call-AI Logo" 
           className="w-8 h-8 md:w-24  md:h-14 md bg-cover"
         />
-        </a>
-      </motion.div>
+        </a>  */}
+       </motion.div>
 
       {/* Right Navigation */}
       <motion.nav
@@ -84,7 +84,7 @@ function Navbar() {
               className="bg-black text-white hover:bg-gray-700"
               onClick={navToContact}
             >
-              Contact-US
+              Contact Us
             </Button>
             <Button
               variant="default"
