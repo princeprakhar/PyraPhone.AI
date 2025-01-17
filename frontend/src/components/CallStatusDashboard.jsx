@@ -247,7 +247,7 @@ function CallStatusDashboard() {
                 <strong>Phone Number:</strong> {callStatus.to_number || "N/A"}
               </p>
               <p className="mt-2 text-gray-400">
-                <strong>Name or Organization name:</strong>{" "}
+                <strong>Name or Organization name:</strong>
                 {callStatus.nameOfOrganization || "N/A"}
               </p>
             </div>
