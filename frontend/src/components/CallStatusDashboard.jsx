@@ -248,7 +248,7 @@ function CallStatusDashboard() {
               </p>
               <p className="mt-2 text-gray-400">
                 <strong>Name or Organization name:</strong>{" "}
-                {callStatus.email || "N/A"}
+                {callStatus.nameOfOrganization || "N/A"}
               </p>
             </div>
           ) : (
