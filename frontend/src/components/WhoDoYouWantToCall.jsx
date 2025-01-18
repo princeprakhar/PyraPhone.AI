@@ -31,7 +31,7 @@ const WhoDoYouWantToCall = () => {
       navigate("/sender/initiate-call", {
         state: {
           phoneNumber: phoneNumber,
-          nameOrOrganization: nameOrOrganization,
+          name_of_org: nameOrOrganization,
           objective: objective,
           additionalInfo: additionalInfo,
         },

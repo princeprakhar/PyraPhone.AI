@@ -105,7 +105,7 @@ function CallStatusDashboard() {
           objective: objective,
           context: callStatus.context,
           caller_number: state.callerNumber,
-          name_of_org: state.nameOfOrganization,
+          name_of_org: state.name_of_org,
         }
       );
       setCallStatus({
@@ -116,7 +116,7 @@ function CallStatusDashboard() {
         objective: objective,
         context: callStatus.context,
         caller_number: state.callerNumber,
-        name_of_org: state.nameOfOrganization,
+        name_of_org: state.name_of_org,
       });
 
       setIsCallEnded(false);

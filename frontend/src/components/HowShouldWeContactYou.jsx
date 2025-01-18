@@ -58,7 +58,7 @@ const HowShouldWeContactYou = () => {
           objective: state.objective,
           context: state.additionalInfo,
           caller_number: callerNumber,
-          name_of_org: state.nameOfOrganization,
+          name_of_org: state.name_of_org,
         },
       });
     } catch (error) {
