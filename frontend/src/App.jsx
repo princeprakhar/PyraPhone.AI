@@ -4,6 +4,7 @@ import ReceiverForm from "./pages/ReceiverForm";
 import SenderForm from "./pages/SenderForm";
 import FAQ from "@/pages/FAQ"
 import CallStatus from "./pages/CallStatus";
+import { Analytics } from "@vercel/analytics/react"
 import ContactPage from "./pages/ContactPage";
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
         <Route path="/" element={<Home />} />
       </Routes>
     </BrowserRouter>
-
+    <Analytics />
       
       
     </div>
