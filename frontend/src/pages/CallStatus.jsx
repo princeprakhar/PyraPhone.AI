@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar"
-// import Footer from "@/components/Footer"
+import Footer from "@/components/Footer"
 import CallStatusDashboard from "@/components/CallStatusDashboard"
 
 
@@ -11,7 +11,7 @@ const CallStatus = () =>{
 
       <Navbar/>
       <CallStatusDashboard/>
-      {/* <Footer/> */}
+      <Footer/>
 
     </>
 }

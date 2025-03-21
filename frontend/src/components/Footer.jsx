@@ -1,11 +1,29 @@
 const Footer = () =>{
-  return <>
-  <footer className="text-center bg-slate-100 bg-opacity-80 w-full p-2 rounded-lg shadow-md mt-10 transition-transform transform hover:bg-slate-900">
-        <p className="text-sm text-gray-800">
-          Built with React.js as frontend and backend with FastAPI by ...
-        </p>
-      </footer>
+  return <div className="w-full">
+ 
 
-  </>
+<footer class="rounded-lg shadow-sm m-4 dark:bg-gray-800">
+    <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+      <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a href="https:///" class="hover:underline">Prakhar Deep</a>. All Rights Reserved.
+    </span>
+    <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+        <li>
+            <a href="#" class="hover:underline me-4 md:me-6">About</a>
+        </li>
+        <li>
+            <a href="#" class="hover:underline me-4 md:me-6">Privacy Policy</a>
+        </li>
+        <li>
+            <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+        </li>
+        <li>
+            <a href="/contact" class="hover:underline">Contact</a>
+        </li>
+    </ul>
+    </div>
+</footer>
+
+
+  </div>
 }
 export default Footer;

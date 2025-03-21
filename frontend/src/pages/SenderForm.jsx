@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar"
 
-// import Footer from "@/components/Footer"
+import Footer from "@/components/Footer"
 import Header from "@/components/Header"
 import WhoDoYouWantToCall from "@/components/WhoDoYouWantToCall"
 
@@ -10,7 +10,7 @@ const SenderForm = ()=>{
       <Navbar></Navbar>
       <Header></Header>
       <WhoDoYouWantToCall/>
-      {/* <Footer></Footer> */}
+      <Footer></Footer>
   </>
 }
 

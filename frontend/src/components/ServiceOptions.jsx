@@ -1,6 +1,7 @@
 import Typewriter from "typewriter-effect";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { ShimmerButton } from "./magicui/shimmer-button";
 
 function ServiceOption() {
   const options = [
@@ -34,10 +35,10 @@ function ServiceOption() {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="flex flex-col w-full lg:w-2/3 h-96 text-white border rounded-lg shadow-md ring-1 p-6"
+          className="flex flex-col w-full lg:w-2/3 h-96 text-white  border border-gray-950 rounded-lg shadow-lg p-9"
         >
           {/* Business Name */}
-          <h1 className="text-4xl md:text-6xl font-bold text-white">Call-AI</h1>
+          <h1 className="text-4xl md:text-6xl font-bold text-white">PyraPhone.AI</h1>
 
           {/* Header with Typewriter Effect */}
           <h2 className="text-xl md:text-3xl flex mt-4 flex-wrap font-semibold whitespace-nowrap">
@@ -79,7 +80,7 @@ function ServiceOption() {
             >
               FAQ
             </motion.button>
-            <motion.button
+            {/* <motion.button
               whileHover={{
                 scale: 1.1,
                 backgroundColor: "#410a4b",
@@ -92,7 +93,12 @@ function ServiceOption() {
               onClick={navToCallForm}
             >
               Start for Free
-            </motion.button>
+            </motion.button> */}
+            <ShimmerButton
+          className="px-6 py-3  text-white rounded-lg shadow-lg"
+          onClick={navToCallForm}>
+          Start for Free
+          </ShimmerButton>
           </div>
 
           <motion.div

@@ -1,4 +1,4 @@
-// import Footer from "@/components/Footer";
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ServiceOption from "@/components/ServiceOptions";
 import HowDoesItWork from "@/components/HowDoesItWork";
@@ -10,7 +10,7 @@ const Home = () =>{
     <ServiceOption/>
     <HowDoesItWork/>
     <UseOfIt/>
-    {/* <Footer></Footer> */}
+    <Footer></Footer>
 
   </>
 }
