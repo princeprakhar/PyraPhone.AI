@@ -1,35 +1,34 @@
-# 📄 PyraPDF.AI
 
-**PyraPDF.AI** is an AI-powered assistant that allows users to upload and interact with PDF documents using advanced language models and vector-based search.
+# 📞 PyraPhone.AI
 
-🔗 **Live App**: [https://prakhar-ai-pdf.vercel.app](https://prakhar-ai-pdf.vercel.app)
+**PyraPhone.AI** is a voice-based AI assistant powered by Blend AI. It allows real-time interaction via calls, enabling conversational AI experiences over voice.
+
+🔗 **Live App**: [https://pyra-phone-ai.vercel.app](https://pyra-phone-ai.vercel.app)
 
 ---
 
 ## 🧠 Features
 
-- Upload and process PDF files
-- Chat with PDF content using RAG (Retrieval-Augmented Generation)
-- Isolation of PDF Chat with Pinecone Namespaces
-- Vector search for relevant context
-- Authentication using JWT and Google OAuth
-- Realtime WebSocket interaction(used for [PyraPhone.ai](https://pyra-phone-ai.vercel.app) app transcription)
+- Make AI-powered voice calls
+- Real-time interaction using WebSockets
+- Text-to-speech with Blend AI
+- Easy-to-use frontend interface
 
 ---
 
 ## 🏗️ Tech Stack
 
-- **Backend**: FastAPI, PostgreSQL, Pinecone , WebSockets
 - **Frontend**: Next.js, Tailwind CSS
-- **Auth**: JWT, Google OAuth
-- **Deployment**: Vercel (Frontend), Render (Backend)
+- **Voice Services**: Blend AI
+- **Deployment**: Vercel
+
+> **Note**: PyraPhone.AI uses the backend from [PyraPDF.AI](https://github.com/princeprakhar/Pyra.ai-pdf), located in the `backend/` folder.
 
 ---
 
 ## 📁 Repository Structure
-```Pyra.ai-pdf/
-├── backend/   # Shared backend for both PyraPDF.AI and PyraPhone.AI
-└── frontend/  # Frontend specific to PyraPDF.AI
+```
+└── frontend/ # Frontend for PyraPhone.AI
 ```
 
 ---
@@ -39,23 +38,20 @@
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/princeprakhar/Pyra.ai-pdf.git
+git clone https://github.com/princeprakhar/PyraPhone.AI.git
 ```
+## Frontend Setup
 
-2. **Backend Setup**
 ```
-cd Pyra.ai-pdf/backend
-# Create a .env file with required environment variables
-# Install Python dependencies
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
-3 . **Frontend Setup:**
-```
-cd ../frontend
+cd PyraPhone.AI/frontend
 npm install
 npm run dev
 ```
-## 📄 License
-- Licensed under the MIT License.
+**⚠️ Backend Required: Make sure the backend from [PyraPDF.AI](https://github.com/princeprakhar/Pyra.ai-pdf) is running before using this app.**
 
+
+## Author
+- [Prakhar deep](https://github.com/princeprakhar) 
+
+## 📄 License
+- Licensed under the MIT [License](https://github.com/princeprakhar/PyraPhone.AI/blob/main/LICENSE).
