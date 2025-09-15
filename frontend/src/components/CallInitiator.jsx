@@ -7,8 +7,25 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { InteractiveHoverButton } from "./magicui/interactive-hover-button";
-import { cn } from "@/lib/utils";
-import { BACKEND_URL } from "@/utils/constants";
+
+// Common country codes for better UX
+const countryCodes = [
+  { code: "+1", country: "US/Canada", flag: "🇺🇸" },
+  { code: "+91", country: "India", flag: "🇮🇳" },
+  { code: "+44", country: "UK", flag: "🇬🇧" },
+  { code: "+61", country: "Australia", flag: "🇦🇺" },
+  { code: "+33", country: "France", flag: "🇫🇷" },
+  { code: "+49", country: "Germany", flag: "🇩🇪" },
+  { code: "+81", country: "Japan", flag: "🇯🇵" },
+  { code: "+86", country: "China", flag: "🇨🇳" },
+  { code: "+7", country: "Russia", flag: "🇷🇺" },
+  { code: "+55", country: "Brazil", flag: "🇧🇷" },
+  { code: "+34", country: "Spain", flag: "🇪🇸" },
+  { code: "+39", country: "Italy", flag: "🇮🇹" },
+  { code: "+82", country: "South Korea", flag: "🇰🇷" },
+  { code: "+65", country: "Singapore", flag: "🇸🇬" },
+  { code: "+60", country: "Malaysia", flag: "🇲🇾" },
+];
 
 const supportedLanguages = {
   auto: "Auto Detect",
@@ -59,16 +76,109 @@ const supportedLanguages = {
   vi: "Vietnamese",
 };
 
+// Phone number validation utility
+const validatePhoneNumber = (countryCode, phoneNumber) => {
+  if (!phoneNumber || phoneNumber.length < 7) {
+    return { isValid: false, message: "Phone number must be at least 7 digits" };
+  }
+  
+  // Remove any non-digit characters
+  const cleanNumber = phoneNumber.replace(/\D/g, '');
+  
+  // Basic length validation based on country code
+  const minLength = countryCode === "+1" ? 10 : 7;
+  const maxLength = countryCode === "+1" ? 10 : 15;
+  
+  if (cleanNumber.length < minLength || cleanNumber.length > maxLength) {
+    return { 
+      isValid: false, 
+      message: `Phone number should be ${minLength}-${maxLength} digits for ${countryCode}` 
+    };
+  }
+  
+  return { isValid: true, message: "" };
+};
+
+// Phone input component
+const PhoneInput = ({ 
+  countryCode, 
+  setCountryCode, 
+  phoneNumber, 
+  setPhoneNumber, 
+  label, 
+  placeholder = "1234567890",
+  required = false,
+  disabled = false 
+}) => {
+  const [error, setError] = useState("");
+
+  const handlePhoneNumberChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); // Only allow digits
+    setPhoneNumber(value);
+    
+    if (value) {
+      const validation = validatePhoneNumber(countryCode, value);
+      setError(validation.isValid ? "" : validation.message);
+    } else {
+      setError("");
+    }
+  };
+
+  return (
+    <div className="flex flex-col space-y-1 sm:space-y-2">
+      <label className="text-xs sm:text-sm font-medium text-gray-300 flex items-center">
+        <Phone className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-purple-400" />
+        {label} {required && <span className="text-purple-400 ml-1">*</span>}
+      </label>
+      <div className="flex space-x-2">
+        <select
+          value={countryCode}
+          onChange={(e) => setCountryCode(e.target.value)}
+          className="p-2 sm:p-3 md:p-4 bg-gray-900/70 backdrop-blur-sm border border-gray-700 rounded-lg shadow-inner focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white transition-all text-sm sm:text-base w-32 sm:w-36"
+          disabled={disabled}
+        >
+          {countryCodes.map(({ code, country, flag }) => (
+            <option key={code} value={code} className="bg-gray-800">
+              {flag} {code} {country}
+            </option>
+          ))}
+        </select>
+        <input
+          type="tel"
+          value={phoneNumber}
+          onChange={handlePhoneNumberChange}
+          placeholder={placeholder}
+          className={`flex-1 p-2 sm:p-3 md:p-4 bg-gray-900/70 backdrop-blur-sm border ${
+            error ? 'border-red-500' : 'border-gray-700'
+          } rounded-lg shadow-inner focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white transition-all text-sm sm:text-base`}
+          disabled={disabled}
+          maxLength={15}
+        />
+      </div>
+      {error && (
+        <p className="text-red-400 text-xs sm:text-sm mt-1">{error}</p>
+      )}
+      <p className="text-gray-500 text-xs">
+        Full number: {countryCode}{phoneNumber ? phoneNumber : placeholder}
+      </p>
+    </div>
+  );
+};
+
 const CallInitiator = () => {
-  // Page 1 state
-  const [phoneNumber, setPhoneNumber] = useState("");
+  // Recipient phone number state
+  const [recipientCountryCode, setRecipientCountryCode] = useState("+1");
+  const [recipientPhoneNumber, setRecipientPhoneNumber] = useState("");
+  
+  // Other recipient details
   const [nameOrOrganization, setNameOfOrganization] = useState("");
   const [objective, setObjective] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState("");
-  const [language, setLanguage] = useState("auto"); // Default to auto-detect language
+  const [language, setLanguage] = useState("auto");
   
-  // Page 2 state
-  const [callerNumber, setCallerNumber] = useState("");
+  // Caller details state
+  const [callerCountryCode, setCallerCountryCode] = useState("+1");
+  const [callerPhoneNumber, setCallerPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -81,64 +191,140 @@ const CallInitiator = () => {
 
   const handleInputChange = (setter) => (e) => setter(e.target.value);
 
-  const handleNextTab = () => {
-    if (!phoneNumber || !objective) {
+  // Validation for first tab
+  const validateFirstTab = () => {
+    if (!recipientPhoneNumber || !objective) {
       toast({
         title: "Required Fields Missing",
-        description: "Please fill in all required fields before proceeding.",
+        description: "Please fill in phone number and objective before proceeding.",
         duration: 5000,
         className: "bg-white text-red-700 font-semibold",
       });
-      return;
+      return false;
     }
-    setActiveTab("contact");
+
+    const phoneValidation = validatePhoneNumber(recipientCountryCode, recipientPhoneNumber);
+    if (!phoneValidation.isValid) {
+      toast({
+        title: "Invalid Phone Number",
+        description: phoneValidation.message,
+        duration: 5000,
+        className: "bg-white text-red-700 font-semibold",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  // Validation for second tab
+  const validateSecondTab = () => {
+    if (!email) {
+      toast({
+        title: "Email Required",
+        description: "Please provide your email address.",
+        duration: 5000,
+        className: "bg-white text-red-700 font-semibold",
+      });
+      return false;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please provide a valid email address.",
+        duration: 5000,
+        className: "bg-white text-red-700 font-semibold",
+      });
+      return false;
+    }
+
+    // Validate caller phone number if provided
+    if (callerPhoneNumber) {
+      const phoneValidation = validatePhoneNumber(callerCountryCode, callerPhoneNumber);
+      if (!phoneValidation.isValid) {
+        toast({
+          title: "Invalid Caller Phone Number",
+          description: phoneValidation.message,
+          duration: 5000,
+          className: "bg-white text-red-700 font-semibold",
+        });
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleNextTab = () => {
+    if (validateFirstTab()) {
+      setActiveTab("contact");
+    }
   };
 
   const handleMakeCall = async () => {
-    if (!email) {
-      toast({
-        title: "Required Fields Missing",
-        description: "Please provide your email address.",
-        duration: 5000,
-        className: "bg-white text-red-400 font-semibold",
-      });
-      return;
-    }
+    if (!validateSecondTab()) return;
 
     setIsLoading(true);
     try {
-      const backendUrl = BACKEND_URL + "/bland-ai/assistant-initiate-call";
-      console.log(`Language Code: ${language}`);
-      const response = await axios.post(backendUrl, {
-        objective: String(objective),
-        context: String(additionalInfo),
-        caller_number: String(callerNumber), // Ensure it's a string
-        caller_name: String(name),
-        caller_email: String(email),
+      // Concatenate country code and phone numbers
+      const fullRecipientPhone = `${recipientCountryCode}${recipientPhoneNumber}`;
+      const fullCallerPhone = callerPhoneNumber ? `${callerCountryCode}${callerPhoneNumber}` : "";
+
+      const backendUrl = "http://localhost:8000/api/assistant-initiate-call";
+      
+      const requestData = {
+        objective: objective.trim(),
+        context: additionalInfo.trim(),
+        caller_number: fullCallerPhone,
+        caller_name: name.trim() || "AI Assistant User",
+        caller_email: email.trim(),
         language_code: language,
-        phone_number: String(phoneNumber), // Ensure it's a string
-        name_of_org: String(nameOrOrganization),
-      });
-      navigate("/sender/initiate-call/call-status", {
-        state: {
-          ssid: response.data.call_sid,
-          isInitiated: true,
-          to_number: phoneNumber,
-          email: email,
-          objective: objective,
-          context: additionalInfo,
-          caller_number: callerNumber,
-          name_of_org: nameOrOrganization,
-        },
-      });
+        phone_number: fullRecipientPhone,
+        name_of_org: nameOrOrganization.trim() || "AI Call Service",
+      };
+
+      console.log("Making call with payload:", requestData);
+      
+      const response = await axios.post(backendUrl, requestData);
+      console.log("API Response:", response.data);
+
+      if (response.data.call_sid) {
+        navigate("/sender/initiate-call/call-status", {
+          state: {
+            ssid: response.data.call_sid,
+            isInitiated: true,
+            to_number: fullRecipientPhone,
+            email: email.trim(),
+            objective: objective.trim(),
+            context: additionalInfo.trim(),
+            caller_number: fullCallerPhone,
+            name_of_org: nameOrOrganization.trim() || "AI Call Service",
+          },
+        });
+
+        toast({
+          title: "Call Initiated Successfully!",
+          description: `Calling ${fullRecipientPhone}. You'll receive updates at ${email}`,
+          duration: 5000,
+          className: "bg-white text-green-600 font-semibold",
+        });
+      } else {
+        throw new Error("No call_sid received from server");
+      }
     } catch (error) {
-      setIsLoading(false);
+      console.error("Failed to initiate call:", error);
+      const errorMessage = error.response?.data?.detail || error.message || "Unknown error occurred";
       toast({
-        title: "Error",
-        description: "Failed to initiate the call. Please try again.",
-        duration: 5000,
+        title: "Call Failed",
+        description: `Failed to initiate the call: ${errorMessage}`,
+        duration: 8000,
         className: "bg-white text-red-700 font-semibold",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -173,31 +359,29 @@ const CallInitiator = () => {
                 <TabsTrigger 
                   value="contact" 
                   className="rounded-md py-1 sm:py-3 text-xs sm:text-sm md:text-base data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600/90 data-[state=active]:to-indigo-600/90 data-[state=active]:text-white transition-all"
-                  disabled={!phoneNumber || !objective}
+                  disabled={!recipientPhoneNumber || !objective}
                 >
                   <User className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                   Your Details
                 </TabsTrigger>
               </TabsList>
 
-              {/* First tab content */}
+              {/* First tab content - Recipient Details */}
               <TabsContent value="who" className="space-y-4 sm:space-y-6 px-1 sm:px-2">
-                <div className="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 rounded-lg p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-5 bg-black/90">
-                  <div className="flex flex-col space-y-1 sm:space-y-2">
-                    <label htmlFor="phone-number" className="text-xs sm:text-sm font-medium text-gray-300 flex items-center">
-                      <Phone className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-purple-400" />
-                      Phone Number <span className="text-purple-400 ml-1">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone-number"
-                      value={phoneNumber}
-                      onChange={handleInputChange(setPhoneNumber)}
-                      placeholder="+1234567890"
-                      className="p-2 sm:p-3 md:p-4 bg-gray-900/70 backdrop-blur-sm border border-gray-700 rounded-lg shadow-inner focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white transition-all text-sm sm:text-base"
-                    />
-                  </div>
+                <div className="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 rounded-lg p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6 bg-black/90">
+                  
+                  {/* Recipient Phone Number */}
+                  <PhoneInput
+                    countryCode={recipientCountryCode}
+                    setCountryCode={setRecipientCountryCode}
+                    phoneNumber={recipientPhoneNumber}
+                    setPhoneNumber={setRecipientPhoneNumber}
+                    label="Recipient Phone Number"
+                    placeholder="1234567890"
+                    required={true}
+                  />
 
+                  {/* Organization Name */}
                   <div className="flex flex-col space-y-1 sm:space-y-2">
                     <label htmlFor="nameOrOrganization" className="text-xs sm:text-sm font-medium text-gray-300 flex items-center">
                       <Briefcase className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-purple-400" />
@@ -213,6 +397,7 @@ const CallInitiator = () => {
                     />
                   </div>
 
+                  {/* Objective */}
                   <div className="flex flex-col space-y-1 sm:space-y-2">
                     <label htmlFor="objective" className="text-xs sm:text-sm font-medium text-gray-300 flex items-center">
                       <Target className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-purple-400" />
@@ -228,6 +413,7 @@ const CallInitiator = () => {
                     />
                   </div>
 
+                  {/* Additional Information */}
                   <div className="flex flex-col space-y-1 sm:space-y-2">
                     <label htmlFor="additionalInfo" className="text-xs sm:text-sm font-medium text-gray-300 flex items-center">
                       <Info className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-purple-400" />
@@ -238,7 +424,7 @@ const CallInitiator = () => {
                       value={additionalInfo}
                       onChange={handleInputChange(setAdditionalInfo)}
                       placeholder="Please provide all necessary information..."
-                      className="p-2 sm:p-3 md:p-4 bg-gray-900/70 backdrop-blur-sm border border-gray-700 rounded-lg shadow-inner focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white min-h-[80px] sm:min-h-[100px] md:min-h-[120px] transition-all text-sm sm:text-base"
+                      className="p-2 sm:p-3 md:p-4 bg-gray-900/70 backdrop-blur-sm border border-gray-700 rounded-lg shadow-inner focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white min-h-[80px] sm:min-h-[100px] md:min-h-[120px] transition-all text-sm sm:text-base resize-none"
                     />
                   </div>
 
@@ -246,16 +432,19 @@ const CallInitiator = () => {
                     <InteractiveHoverButton 
                       onClick={handleNextTab}
                       className="border-purple-500/50 bg-black/40 text-white py-2 sm:py-3 px-6 sm:px-8 text-sm sm:text-base md:text-lg tracking-wide shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all duration-500"
+                      disabled={!recipientPhoneNumber || !objective}
                     >
-                      Continue
+                      Continue 
                     </InteractiveHoverButton>
                   </div>
                 </div>
               </TabsContent>
 
-              {/* Second tab content */}
+              {/* Second tab content - Your Details */}
               <TabsContent value="contact" className="space-y-4 sm:space-y-6 px-1 sm:px-2">
-                <div className="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 rounded-lg p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-5">
+                <div className="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 rounded-lg p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
+                  
+                  {/* Email */}
                   <div className="flex flex-col space-y-1 sm:space-y-2">
                     <label htmlFor="email" className="text-xs sm:text-sm font-medium text-gray-300 flex items-center">
                       <Mail className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-purple-400" />
@@ -272,6 +461,7 @@ const CallInitiator = () => {
                     />
                   </div>
 
+                  {/* Your Name */}
                   <div className="flex flex-col space-y-1 sm:space-y-2">
                     <label htmlFor="name" className="text-xs sm:text-sm font-medium text-gray-300 flex items-center">
                       <User className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-purple-400" />
@@ -288,22 +478,18 @@ const CallInitiator = () => {
                     />
                   </div>
 
-                  <div className="flex flex-col space-y-1 sm:space-y-2">
-                    <label htmlFor="caller-number" className="text-xs sm:text-sm font-medium text-gray-300 flex items-center">
-                      <Phone className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-purple-400" />
-                      Your Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      id="caller-number"
-                      value={callerNumber}
-                      onChange={handleInputChange(setCallerNumber)}
-                      placeholder="+1234567890"
-                      className="p-2 sm:p-3 md:p-4 bg-gray-900/70 backdrop-blur-sm border border-gray-700 rounded-lg shadow-inner focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white transition-all text-sm sm:text-base"
-                      disabled={isLoading}
-                    />
-                  </div>
+                  {/* Your Phone Number */}
+                  <PhoneInput
+                    countryCode={callerCountryCode}
+                    setCountryCode={setCallerCountryCode}
+                    phoneNumber={callerPhoneNumber}
+                    setPhoneNumber={setCallerPhoneNumber}
+                    label="Your Phone Number (Optional)"
+                    placeholder="1234567890"
+                    disabled={isLoading}
+                  />
 
+                  {/* Language Selection */}
                   <div className="flex flex-col space-y-1 sm:space-y-2">
                     <label htmlFor="language" className="text-xs sm:text-sm font-medium text-gray-300 flex items-center">
                       <Globe className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-purple-400" />
@@ -324,30 +510,31 @@ const CallInitiator = () => {
                     </select>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-3 sm:mt-4">
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-6">
                     <Button
                       onClick={() => setActiveTab("who")}
-                      className="flex-1 py-2 sm:py-4 md:py-6 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center gap-1 sm:gap-2 transition-all text-sm sm:text-base"
+                      className="flex-1 py-2 sm:py-4 md:py-6 bg-gray-800 hover:bg-gray-700 text-white rounded-lg flex items-center justify-center gap-2 transition-all text-sm sm:text-base font-medium"
                       disabled={isLoading}
                     >
-                      <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-                      <span className="text-sm sm:text-base font-medium">Back</span>
+                      <ArrowLeft className="w-4 h-4" />
+                      Back
                     </Button>
                     
                     <Button
                       onClick={handleMakeCall}
-                      className="flex-1 py-2 sm:py-4 md:py-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg flex items-center justify-center gap-1 sm:gap-2 transition-all shadow-lg hover:shadow-purple-500/20 text-sm sm:text-base"
-                      disabled={isLoading}
+                      className="flex-1 py-2 sm:py-4 md:py-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-purple-500/20 text-sm sm:text-base font-medium"
+                      disabled={isLoading || !email}
                     >
                       {isLoading ? (
-                        <div className="flex items-center justify-center gap-1 sm:gap-2">
-                          <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
-                          <span className="text-sm sm:text-base font-medium">Processing...</span>
-                        </div>
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Processing...
+                        </>
                       ) : (
                         <>
-                          <span className="text-sm sm:text-base font-medium">Make Call</span>
-                          <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
+                          Make Call
+                          <Phone className="w-4 h-4" />
                         </>
                       )}
                     </Button>
@@ -359,7 +546,7 @@ const CallInitiator = () => {
         </div>
       </div>
       
-      {/* Add shimmer effect and responsive styles */}
+      {/* Styles */}
       <style jsx>{`
         @media screen and (min-width: 400px) {
           .xs\\:inline {
@@ -392,15 +579,9 @@ const CallInitiator = () => {
         }
         
         @keyframes tilt {
-          0%, 100% {
-            transform: rotate(0deg);
-          }
-          25% {
-            transform: rotate(1deg);
-          }
-          75% {
-            transform: rotate(-1deg);
-          }
+          0%, 100% { transform: rotate(0deg); }
+          25% { transform: rotate(1deg); }
+          75% { transform: rotate(-1deg); }
         }
       `}</style>
       
