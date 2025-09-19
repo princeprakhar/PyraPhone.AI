@@ -9,10 +9,10 @@ import { Loader2 } from "lucide-react";
 
 // Updated backend URLs to match your new endpoints
 const BACKEND_URLS = {
-  INITIATE_CALL: "http://localhost:8000/api/assistant-initiate-call",
-  END_CALL: "http://localhost:8000/api/end-call",
-  CALL_STATUS: "http://localhost:8000/api/call-status",
-  WEBSOCKET: "ws://localhost:8000/api/ws/live-transcript",
+  INITIATE_CALL: "https://prakhar-ai-pdf.onrender.com/api/assistant-initiate-call",
+  END_CALL: "https://prakhar-ai-pdf.onrender.com/api/end-call",
+  CALL_STATUS: "https://prakhar-ai-pdf.onrender.com/api/call-status",
+  WEBSOCKET: "ws://prakhar-ai-pdf.onrender.com/api/ws/live-transcript",
 };
 
 const ANIMATION_VARIANTS = {

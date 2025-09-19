@@ -273,7 +273,7 @@ const CallInitiator = () => {
       const fullRecipientPhone = `${recipientCountryCode}${recipientPhoneNumber}`;
       const fullCallerPhone = callerPhoneNumber ? `${callerCountryCode}${callerPhoneNumber}` : "";
 
-      const backendUrl = "http://localhost:8000/api/assistant-initiate-call";
+      const backendUrl = "https://prakhar-ai-pdf.onrender.com/api/assistant-initiate-call";
       
       const requestData = {
         objective: objective.trim(),
