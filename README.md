@@ -3,11 +3,10 @@
 
 **PyraPhone.AI** is a voice-based AI assistant powered by Blend AI. It allows real-time interaction via calls, enabling conversational AI experiences over voice.
 
-🔗 **Live App**: [https://pyra-phone-ai.vercel.app](https://pyra-phone-ai.vercel.app)
+🔗 **Live App**: [pyra-phone-ai.vercel.app](https://pyra-phone-ai.vercel.app)  
+*(Since the backend is deployed on a serverless architecture, it may take a few seconds to spin up on the first load. In the meantime, you can check out the demo video below.)*  
 
-🔗 **Watch demo video**:(https://youtu.be/i3g8raQ8om4)
-
-
+🔗 **Watch Demo Video**: [YouTube Link](https://youtu.be/i3g8raQ8om4)
 
 
 ---
