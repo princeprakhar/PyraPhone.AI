@@ -12,7 +12,7 @@ const BACKEND_URLS = {
   INITIATE_CALL: "https://prakhar-ai-pdf.onrender.com/api/assistant-initiate-call",
   END_CALL: "https://prakhar-ai-pdf.onrender.com/api/end-call",
   CALL_STATUS: "https://prakhar-ai-pdf.onrender.com/api/call-status",
-  WEBSOCKET: "ws://prakhar-ai-pdf.onrender.com/api/ws/live-transcript",
+  WEBSOCKET: "wss://prakhar-ai-pdf.onrender.com/api/ws/live-transcript",
 };
 
 const ANIMATION_VARIANTS = {
