@@ -440,7 +440,7 @@ const CallInitiator = () => {
                 </div>
               </TabsContent>
 
-              {/* Second tab content - Your Details */}
+          {/* Second   tab content - Your Details */}
               <TabsContent value="contact" className="space-y-4 sm:space-y-6 px-1 sm:px-2">
                 <div className="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 rounded-lg p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
                   
